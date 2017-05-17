@@ -54,7 +54,12 @@ public class DpPathFinder {
         evaluate(checking);
       }
     }
-    constructSolution(target, start);
+    if (isStartFound) {
+      System.out.println("found solution");
+      constructSolution(target, start);
+    } else {
+      System.out.println("no path found");
+    }
   }
 
   private static void constructSolution(Point target, Point start) {
@@ -82,17 +87,16 @@ public class DpPathFinder {
   }
 
   private static void evaluateDirection(Point checking, Point direction) {
-    System.out.print(direction.row);
-    System.out.print(" ");
-    System.out.print(direction.collumn);
-    System.out.print(" ");
-    System.out.println(world.getTile(direction.row, direction.collumn));
     if (world.getTile(direction.row, direction.collumn) != '*') {
-      if (memos[direction.row][direction.collumn].addNewNote(checking,
-          memos[checking.row][checking.collumn].getValue() + 1)) {
+      if (isMemoUpdatedAfterAddition(checking, direction)) {
         checkingQueue.add(direction);
       }
     }
+  }
+
+  private static boolean isMemoUpdatedAfterAddition(Point checking, Point direction) {
+    return memos[direction.row][direction.collumn].addNewNote(checking,
+        memos[checking.row][checking.collumn].getValue() + 1);
   }
 
   private static void initialize(World world) {

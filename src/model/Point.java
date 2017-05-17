@@ -1,4 +1,5 @@
 package model;
+import java.util.Comparator;
 
 public class Point {
   public int row;
