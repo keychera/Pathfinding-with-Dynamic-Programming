@@ -13,21 +13,28 @@ import view.MainFrame;
 import view.WorldConsoleView;
 
 public class Main {
+  private static MainFrame frame;
 
   public static void main(String[] args) {
     Path inputFilePath = Resource.getWorld("worldInput.txt");
     try {
       World world = new World(Files.readAllLines(inputFilePath));
-      new WorldConsoleView(world);
-      DpPathFinder.findPath(world, new Point(7,8), new Point(0, 0));
-      new WorldConsoleView(world);
+//      new WorldConsoleView(world);
+      Point target = new Point(2,1);
+      Point start = new Point(0,0);
+      DpPathFinder.findPath(world, target, start);
+      World solution = DpPathFinder.constructSolution();
+//      new WorldConsoleView(solution);
+      int solutionCost = DpPathFinder.getSolutionCost();
+      
       SwingUtilities.invokeLater(new Runnable() {
         @Override
         public void run() {         
-          JFrame frame = new MainFrame(world);
+          frame = new MainFrame(world,solution,solutionCost, start, target);
           frame.repaint();
         }
       });
+      
     } catch (IOException e) {
       System.out.println("fail to open res");
     } catch (IndexOutOfBoundsException e) {
